@@ -10,7 +10,6 @@ sandbox for showing off backend fundamentals (hashed secrets, transactional inte
 receipt generation) without touching a single real cent.
 
 ![UPay screenshot](screenshot.png)
-*(swap in your own screenshot after running the app)*
 
 > ⚠️ **This is a simulation.** No real money, cards, banks, or telecom networks are
 > involved anywhere in this codebase.
