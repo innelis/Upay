@@ -1,0 +1,24 @@
+{% extends "app_base.html" %}
+{% block title %}Send Money · UPay{% endblock %}
+{% block page %}
+<div class="form-page">
+    <h2>Send Money</h2>
+    <p class="form-subtitle">Send to any UPay user by username, phone, or account number.</p>
+
+    <form method="POST" class="stacked-form">
+        <label>Recipient (username / phone / account number)
+            <input type="text" name="identifier" placeholder="e.g. bob or 08012345678" required autofocus>
+        </label>
+        <label>Amount (₦)
+            <input type="number" name="amount" min="1" step="0.01" placeholder="e.g. 2000" required>
+        </label>
+        <label>Note (optional)
+            <input type="text" name="note" placeholder="What's it for?">
+        </label>
+        <label>Transaction PIN
+            <input type="password" name="pin" maxlength="4" pattern="\d{4}" inputmode="numeric" placeholder="4-digit PIN" required>
+        </label>
+        <button type="submit" class="btn-primary">Send Money</button>
+    </form>
+</div>
+{% endblock %}

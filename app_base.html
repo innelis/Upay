@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="app-shell">
+    <nav class="topnav">
+        <a href="{{ url_for('dashboard') }}" class="brand">💳 UPay</a>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Home</a>
+            <a href="{{ url_for('transfer') }}" class="{{ 'active' if request.endpoint == 'transfer' }}">Send</a>
+            <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">History</a>
+            <a href="{{ url_for('profile') }}" class="{{ 'active' if request.endpoint == 'profile' }}">Profile</a>
+        </div>
+        <div class="nav-user">
+            <div class="avatar" style="background:{{ current_user.avatar_color }}">{{ current_user.initials() }}</div>
+            <a href="{{ url_for('logout') }}" class="logout-link">Log out</a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        {% block page %}{% endblock %}
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "app_base.html" %}
+{% block title %}History · UPay{% endblock %}
+{% block page %}
+<div class="section">
+    <div class="section-header">
+        <h2>Transaction History</h2>
+    </div>
+
+    <div class="filter-tabs">
+        <a href="{{ url_for('history', type='all') }}" class="{{ 'active' if active_filter == 'all' }}">All</a>
+        <a href="{{ url_for('history', type='deposit') }}" class="{{ 'active' if active_filter == 'deposit' }}">Deposits</a>
+        <a href="{{ url_for('history', type='transfer_out') }}" class="{{ 'active' if active_filter == 'transfer_out' }}">Sent</a>
+        <a href="{{ url_for('history', type='transfer_in') }}" class="{{ 'active' if active_filter == 'transfer_in' }}">Received</a>
+        <a href="{{ url_for('history', type='airtime') }}" class="{{ 'active' if active_filter == 'airtime' }}">Airtime</a>
+        <a href="{{ url_for('history', type='bill') }}" class="{{ 'active' if active_filter == 'bill' }}">Bills</a>
+    </div>
+
+    <div class="tx-list">
+        {% for tx in transactions %}
+        <a href="{{ url_for('receipt', reference=tx.reference) }}" class="tx-row">
+            <div class="tx-icon tx-icon-{{ tx.tx_type }}">
+                {% if tx.tx_type == 'deposit' %}⬇️
+                {% elif tx.tx_type == 'transfer_in' %}⬇️
+                {% elif tx.tx_type == 'transfer_out' %}⬆️
+                {% elif tx.tx_type == 'airtime' %}📱
+                {% elif tx.tx_type == 'bill' %}🧾
+                {% endif %}
+            </div>
+            <div class="tx-info">
+                <span class="tx-desc">{{ tx.description }}</span>
+                <span class="tx-time">{{ tx.timestamp.strftime('%d %b %Y, %H:%M') }} · {{ tx.reference }}</span>
+            </div>
+            <div class="tx-amount {{ 'positive' if tx.tx_type in ['deposit', 'transfer_in'] else 'negative' }}">
+                {{ '+' if tx.tx_type in ['deposit', 'transfer_in'] else '-' }}₦{{ "{:,.2f}".format(tx.amount) }}
+            </div>
+        </a>
+        {% else %}
+        <div class="empty-state">No transactions found for this filter.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

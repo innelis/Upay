@@ -1,0 +1,69 @@
+{% extends "app_base.html" %}
+{% block title %}Dashboard · UPay{% endblock %}
+{% block page %}
+
+<div class="wallet-card">
+    <div class="wallet-card-top">
+        <span class="wallet-label">Available balance</span>
+        <span class="wallet-account">Acct: {{ current_user.account_number }}</span>
+    </div>
+    <div class="wallet-balance" id="wallet-balance" data-balance="{{ current_user.balance }}">
+        ₦{{ "{:,.2f}".format(current_user.balance) }}
+    </div>
+    <div class="wallet-card-bottom">
+        <span>{{ current_user.full_name }}</span>
+        <span class="demo-tag">SIMULATED</span>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <a href="{{ url_for('fund') }}" class="action-tile">
+        <span class="action-icon">➕</span>
+        <span>Fund Wallet</span>
+    </a>
+    <a href="{{ url_for('transfer') }}" class="action-tile">
+        <span class="action-icon">📤</span>
+        <span>Send Money</span>
+    </a>
+    <a href="{{ url_for('airtime') }}" class="action-tile">
+        <span class="action-icon">📱</span>
+        <span>Buy Airtime</span>
+    </a>
+    <a href="{{ url_for('bills') }}" class="action-tile">
+        <span class="action-icon">🧾</span>
+        <span>Pay Bills</span>
+    </a>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>Recent activity</h2>
+        <a href="{{ url_for('history') }}" class="see-all">See all →</a>
+    </div>
+
+    <div class="tx-list">
+        {% for tx in recent_tx %}
+        <a href="{{ url_for('receipt', reference=tx.reference) }}" class="tx-row">
+            <div class="tx-icon tx-icon-{{ tx.tx_type }}">
+                {% if tx.tx_type == 'deposit' %}⬇️
+                {% elif tx.tx_type == 'transfer_in' %}⬇️
+                {% elif tx.tx_type == 'transfer_out' %}⬆️
+                {% elif tx.tx_type == 'airtime' %}📱
+                {% elif tx.tx_type == 'bill' %}🧾
+                {% endif %}
+            </div>
+            <div class="tx-info">
+                <span class="tx-desc">{{ tx.description }}</span>
+                <span class="tx-time">{{ tx.timestamp.strftime('%d %b, %H:%M') }}</span>
+            </div>
+            <div class="tx-amount {{ 'positive' if tx.tx_type in ['deposit', 'transfer_in'] else 'negative' }}">
+                {{ '+' if tx.tx_type in ['deposit', 'transfer_in'] else '-' }}₦{{ "{:,.2f}".format(tx.amount) }}
+            </div>
+        </a>
+        {% else %}
+        <div class="empty-state">No transactions yet. Try funding your wallet!</div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
