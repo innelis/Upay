@@ -9,7 +9,7 @@ with **Python, Flask, Jinja2, and SQLite**, no payment processor involved. It's 
 sandbox for showing off backend fundamentals (hashed secrets, transactional integrity,
 receipt generation) without touching a single real cent.
 
-![UPay screenshot](screenshot.png)
+![UPay screenshot](screenshott.png)
 
 > ⚠️ **This is a simulation.** No real money, cards, banks, or telecom networks are
 > involved anywhere in this codebase.
