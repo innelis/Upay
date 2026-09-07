@@ -1,92 +1,125 @@
 # UPay 💳
 
-**A fintech wallet, fully simulated — every rand/naira/dollar is fake, every flow is real.**
+**A simulated digital wallet demonstrating the backend architecture behind fintech applications.**
 
-UPay is an Opay-inspired digital wallet that demonstrates how fintech apps handle the
-things that actually matter: PIN-gated transactions, atomic balance updates, an
-auditable transaction ledger, and peer-to-peer transfers between accounts — all built
-with **Python, Flask, Jinja2, and SQLite**, no payment processor involved. It's a
-sandbox for showing off backend fundamentals (hashed secrets, transactional integrity,
-receipt generation) without touching a single real cent.
+UPay is an Opay-inspired wallet application where all money is completely fictional.
+
+The project focuses on demonstrating how financial applications handle authentication, PIN-protected transactions, wallet balances, transaction records, peer-to-peer transfers, and payment flows — without connecting to real banks, cards, or payment providers.
 
 ![UPay screenshot](screenshott.png)
 
-> ⚠️ **This is a simulation.** No real money, cards, banks, or telecom networks are
-> involved anywhere in this codebase.
+> ⚠️ **DEMO ONLY:** UPay does not process real money. All balances, transactions, networks, bills, and payments exist entirely inside the application's demo database.
 
-## Features
-- Auth (register/login) with hashed passwords + a 4-digit transaction PIN
-- New users get a simulated starting balance (₦5,000 demo money)
-- **Fund Wallet** — simulated card top-up
-- **Send Money** — transfer to any other UPay user by username, phone, or account number
-- **Buy Airtime** — simulated top-up across 4 fake networks
-- **Pay Bills** — simulated electricity/DSTV/internet/water payments
-- Full transaction history with filters, and a receipt page per transaction
-- Every sensitive action (transfer, airtime, bills) requires the account's transaction PIN
-- Clear "DEMO MODE" banner + disclaimers throughout, so it's obviously a simulation
+## ✨ What You Can Try
 
-## Tech stack
-- **Backend:** Flask, Flask-SQLAlchemy, Flask-Login
-- **Frontend:** Jinja2 templates, vanilla CSS + JS
-- **Database:** SQLite (swap the URI in `app.py` for Postgres/MySQL in production)
+After creating a demo account, you can:
 
-## Getting started
+* 💰 Start with a simulated **₦5,000 balance**
+* 💳 Simulate **funding your wallet**
+* 💸 Send demo money to another UPay user
+* 📱 Purchase simulated airtime
+* 💡 Pay simulated electricity, DSTV, internet, and water bills
+* 📜 Browse your complete transaction history
+* 🧾 Open individual transaction receipts
+* 🔐 Protect sensitive transactions with a transaction PIN
+* 👤 Manage your profile
 
-```bash
-python -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+You can create multiple demo accounts to test transfers between users.
 
-pip install -r requirements.txt
-flask --app app init-db
-python app.py
-```
+## 🛠️ Built With
 
-Visit **http://localhost:5001**, register an account (you'll get a demo ₦5,000
-balance), and try funding your wallet, sending money to a second test account,
-buying airtime, or paying a fake bill.
+* **Python**
+* **Flask**
+* **Flask-SQLAlchemy**
+* **Flask-Login**
+* **Jinja2**
+* **SQLite**
+* **Vanilla CSS**
+* **JavaScript**
 
-To test transfers between users, register two accounts (e.g. in separate
-browser tabs / incognito windows) and send between them.
+No real payment processor or financial institution is connected to the application.
 
-## Project structure
-```
+## ⚙️ How It Works
+
+### Wallet
+
+Each demo account has a wallet balance stored in the database.
+
+Funding, transfers, airtime purchases, and bill payments update the balance within database transactions.
+
+### Transactions
+
+Every financial action creates a transaction record with a unique reference.
+
+This provides an auditable history of activity and allows each transaction to have its own receipt.
+
+### Peer-to-Peer Transfers
+
+Users can transfer simulated funds to another UPay account using identifying information such as:
+
+* Username
+* Phone number
+* Account number
+
+The money moves only between users inside the demo database.
+
+### Transaction PIN
+
+Sensitive actions require the user's four-digit transaction PIN.
+
+The PIN is stored securely as a hash rather than plain text.
+
+## 🎯 What This Project Demonstrates
+
+UPay demonstrates practical backend concepts relevant to fintech applications:
+
+* Authentication and authorization
+* Password and PIN hashing
+* Relational database design
+* Financial transaction modelling
+* Atomic database operations
+* Transaction history and audit trails
+* Form validation
+* Session management
+* Receipt generation
+* Server-side rendering
+* Responsive UI development
+
+## 🚀 Possible Improvements
+
+Future versions could include:
+
+* KYC and account verification
+* Spending limits
+* Savings goals
+* Scheduled payments
+* Recurring transactions
+* Admin dashboard
+* Transaction dispute system
+* Notifications
+* PostgreSQL deployment
+* Integration with a real payment provider in a production environment
+
+## 📁 Project Structure
+
+```text
 upay/
-├── app.py                  # Routes, models
+├── app.py
 ├── requirements.txt
-├── upay.db                  # created on first run
 ├── templates/
-│   ├── base.html            # shell + demo banner
-│   ├── app_base.html        # authenticated layout w/ top nav
-│   ├── login.html / register.html
-│   ├── dashboard.html       # wallet card + quick actions + recent activity
-│   ├── fund.html / transfer.html / airtime.html / bills.html
-│   ├── history.html         # filterable transaction list
-│   ├── receipt.html         # single transaction receipt
+│   ├── base.html
+│   ├── app_base.html
+│   ├── login.html
+│   ├── register.html
+│   ├── dashboard.html
+│   ├── fund.html
+│   ├── transfer.html
+│   ├── airtime.html
+│   ├── bills.html
+│   ├── history.html
+│   ├── receipt.html
 │   └── profile.html
 └── static/
     ├── css/style.css
     └── js/app.js
 ```
-
-## How it works
-- **Wallet balance** is just a `Float` column on `User` — funding/sending/spending
-  simply increments or decrements it inside a DB transaction.
-- **Every action** (deposit, transfer, airtime, bill) creates a `Transaction` row
-  with a unique reference, so there's always an auditable history + receipt.
-- **Transfers** are peer-to-peer between two `User` rows — money only moves
-  between accounts that exist in this same demo database, never anywhere real.
-- **PIN protection** — transfers, airtime, and bill payments all check a hashed
-  4-digit PIN set at registration, mirroring how real wallet apps gate money
-  movement.
-
-## Ideas to extend this for your portfolio
-- Add spending limits / KYC tiers
-- Add scheduled/recurring payments
-- Add a savings "goal" feature with interest simulation
-- Add an admin view to reset/top-up demo accounts
-- Deploy to Render/Railway with Postgres
-
-## Deployment notes
-Set a real `UPAY_SECRET_KEY` environment variable in production. Since this is
-a demo app, consider periodically resetting the database (e.g. a nightly cron)
-so demo balances don't run away in a public deployment.
